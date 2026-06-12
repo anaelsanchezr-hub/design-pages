@@ -2,6 +2,9 @@ import * as THREE from 'three'
 import { BODIES } from './data/planets.js'
 import { scaleDistance, scaleRadius } from './scale.js'
 
+const loader = new THREE.TextureLoader()
+const texUrl = (file) => `${import.meta.env.BASE_URL}textures/${file}`
+
 // Crea todos los cuerpos. Devuelve Map id -> { mesh, group, data, position, radius }.
 export function createPlanets(scene) {
   const bodies = new Map()
@@ -16,6 +19,12 @@ export function createPlanets(scene) {
     const mat = data.id === 'sol'
       ? new THREE.MeshBasicMaterial({ color: data.colorAcento })
       : new THREE.MeshStandardMaterial({ color: data.colorAcento, roughness: 0.9, metalness: 0.0 })
+    loader.load(
+      texUrl(data.textura),
+      (tex) => { mat.map = tex; mat.color.set(0xffffff); mat.needsUpdate = true },
+      undefined,
+      () => { /* textura faltante: se conserva colorAcento */ }
+    )
     const mesh = new THREE.Mesh(geo, mat)
     group.add(mesh)
 
