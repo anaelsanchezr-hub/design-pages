@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { createScene, handleResize } from './scene.js'
 import { isWebGLAvailable, showWebGLFallback } from './webgl-check.js'
 import { createPlanets, rotatePlanets } from './planets.js'
+import { setupScroll } from './scroll.js'
 
 const canvas = document.getElementById('scene')
 
@@ -13,6 +14,10 @@ if (!isWebGLAvailable(canvas)) {
   handleResize(ctx)
 
   const bodies = createPlanets(ctx.scene)
+
+  setupScroll(ctx, bodies, (sectionId, progress, changed) => {
+    if (changed) console.log('Sección activa:', sectionId)
+  })
 
   const clock = new THREE.Clock()
   function animate() {
