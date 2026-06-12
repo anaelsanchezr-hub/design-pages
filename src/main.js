@@ -4,6 +4,7 @@ import { createScene, handleResize } from './scene.js'
 import { isWebGLAvailable, showWebGLFallback } from './webgl-check.js'
 import { createPlanets, rotatePlanets } from './planets.js'
 import { setupScroll } from './scroll.js'
+import { setupUI } from './ui.js'
 
 const canvas = document.getElementById('scene')
 
@@ -15,8 +16,9 @@ if (!isWebGLAvailable(canvas)) {
 
   const bodies = createPlanets(ctx.scene)
 
-  setupScroll(ctx, bodies, (sectionId, progress, changed) => {
-    if (changed) console.log('Sección activa:', sectionId)
+  const ui = setupUI(document.getElementById('overlay'))
+  setupScroll(ctx, bodies, (sectionId, progress) => {
+    ui.update(sectionId, progress)
   })
 
   const clock = new THREE.Clock()
